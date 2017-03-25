@@ -16,6 +16,6 @@ loss = sum(diff(:)'*diff(:))/(2*batch_size);
 
 dv_input = [];
 if backprop
-	dv_input = diff;
+	dv_input = diff ./ batch_size;
 end
 
