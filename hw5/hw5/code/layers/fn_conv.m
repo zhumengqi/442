@@ -24,7 +24,7 @@ temp = zeros(out_height, out_width, filter_depth);
 for i=1:batch_size
     for j = 1:num_filters
         for n = 1:filter_depth
-            temp(:,:,n) = conv2(input(:,:,n,i),params.W(:,:,n,j),'valid');
+            temp(:,:,n) = conv2(input(:,:,n,i),params.W(:,:,n,j),'valid');  % don't understand j
         end
         output(:,:,j,i) = sum(temp,3) + params.b(j);
     end
@@ -45,7 +45,7 @@ for i=1:batch_size
         for n = 1:num_filters
             temp(:,:,n) = conv2(dv_output(:,:,n,i),rot90(params.W(:,:,j,n),2),'full');
         end
-        dv_input(:,:,j, i) = sum(temp,3);
+        dv_input(:,:,j,i) = sum(temp,3);
     end
 end
 temp = zeros(filter_height, filter_width, batch_size);
@@ -57,14 +57,8 @@ for i = 1:filter_depth
         grad.W(:,:,i,j) = sum(temp,3);
     end
 end
-temp =zeros(1,batch_size);
-for i = 1:num_filters
-    for j = 1:batch_size
-        temp2 = dv_output(:,:,i,j);
-        temp(1,j) = sum(temp2(:));
-    end
-    grad.b(i) = sum(temp);
-end
+grad.b = squeeze(sum(sum(sum(dv_output,1),2),4));
+
 
 
 end

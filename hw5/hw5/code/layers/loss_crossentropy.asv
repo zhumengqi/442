@@ -11,7 +11,7 @@ assert(max(labels) <= size(input,1));
 [num_nodes, batch_size] = size(input);
 loss = 0;
 for i = 1:batch_size
-    loss = loss - log(input(labels(i),i));
+    loss = loss - label(i) * log(input(lables(i),i));
 end
 loss = loss/batch_size;
 
@@ -19,7 +19,7 @@ dv_input = zeros(size(input));
 if backprop
 	% TODO: BACKPROP CODE
     for i = 1:batch_size
-        dv_input(labels(i),i) = -1/input(labels(i),i);
+        dv_input(lables(i),i) = -1/input(lables(i),i);
     end
-    dv_input = dv_input/batch_size;
+    dv_input = 
 end
