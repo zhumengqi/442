@@ -25,14 +25,21 @@ else save_file = 'model.mat'; end
 update_params = struct('learning_rate',lr,'weight_decay',wd);
 
 updated_model = model;
+
+selectid = randperm(size(input,4),batchsize);
+selectid = selectid
+
+new_input = input;
+new_label = label;
+
 for i = 1:numIters
 	% TODO: Training code  
-    selectid = randperm(size(input,4),batch_size);
-    new_input = input(:,:,:,selectid);
-    new_label = label(selectid,1);
+    
     [output,activations] = inference_(updated_model,new_input);
+    % model是在主函数建立好的，这里不用管,参考example_model_initialization.m
     [loss, dv_input] = loss_crossentropy_(output, labels, hyper_params, false);
     [grad] = calc_gradient_(updated_model, new_input, activations, dv_output);
-    updated_model = update_weights_(updated_model,grad,update_params);    
+    updated_model = update_weights_(updated_model,grad,update_params);
+    
 end
 model = updated_model;
